@@ -28,7 +28,11 @@ namespace client {
 
 static auto GetSemanticTags(const carla::client::Actor &self) {
   const auto &tags = self.GetSemanticTags();
-  return std::vector<int>(tags.begin(), tags.end());
+  boost::python::list result;
+  for (auto &&item : tags) {
+    result.append(item);
+  }
+  return result;
 }
 
 void export_actor() {
@@ -36,10 +40,10 @@ void export_actor() {
   namespace cc = carla::client;
   namespace cr = carla::rpc;
 
-  class_<std::vector<int>>("vector_of_ints")
-    .def(vector_indexing_suite<std::vector<int>>())
-    .def(self_ns::str(self_ns::self))
-  ;
+  // class_<std::vector<int>>("vector_of_ints")
+  //   .def(vector_indexing_suite<std::vector<int>>())
+  //   .def(self_ns::str(self_ns::self))
+  // ;
 
   class_<cc::Actor, boost::noncopyable, boost::shared_ptr<cc::Actor>>("Actor", no_init)
     // work-around, force return copy to resolve Actor instead of ActorState.
@@ -48,13 +52,13 @@ void export_actor() {
     .add_property("parent", CALL_RETURNING_COPY(cc::Actor, GetParent))
     .add_property("semantic_tags", &GetSemanticTags)
     .add_property("is_alive", CALL_RETURNING_COPY(cc::Actor, IsAlive))
-    .add_property("attributes", +[](const cc::Actor &self) {
-      boost::python::dict atttribute_dict;
-      for (auto &&attribute_value : self.GetAttributes()) {
-        atttribute_dict[attribute_value.GetId()] = attribute_value.GetValue();
-      }
-      return atttribute_dict;
-      })
+    // .add_property("attributes", +[](const cc::Actor &self) {
+    //   boost::python::dict atttribute_dict;
+    //   for (auto &&attribute_value : self.GetAttributes()) {
+    //     atttribute_dict[attribute_value.GetId()] = attribute_value.GetValue();
+    //   }
+    //   return atttribute_dict;
+    //   })
     .def("get_world", CALL_RETURNING_COPY(cc::Actor, GetWorld))
     .def("get_location", &cc::Actor::GetLocation)
     .def("get_transform", &cc::Actor::GetTransform)

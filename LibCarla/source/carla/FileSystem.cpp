@@ -10,20 +10,7 @@
 
 namespace carla {
 
-  void FileSystem::ValidateFilePath(std::string &filepath, const std::string &ext) {
-    namespace fs = boost::filesystem;
-    fs::path path(filepath);
-    if (path.extension().empty() && !ext.empty()) {
-      if (ext[0] != '.') {
-        path += '.';
-      }
-      path += ext;
-    }
-    auto parent = path.parent_path();
-    if (!parent.empty()) {
-      fs::create_directories(parent);
-    }
-    filepath = path.string();
+  void FileSystem::ValidateFilePath(std::string &, const std::string &) {
   }
 
 } // namespace carla
