@@ -18,6 +18,8 @@
 #include "carla/client/detail/Episode.h"
 #include "carla/client/detail/EpisodeProxy.h"
 #include "carla/profiler/LifetimeProfiled.h"
+#include "carla/client/TrafficLight.h"
+#include "carla/rpc/TrafficLightState.h"
 
 #include <memory>
 
@@ -173,6 +175,22 @@ namespace detail {
       return GetActorDynamicState(actor).velocity;
     }
 
+    void SetActorVelocity(const Actor &actor, const geom::Vector3D &vector) {
+      _client.SetActorVelocity(actor.Serialize(), vector);
+    }
+
+    geom::Vector3D GetActorAngularVelocity(const Actor &actor) const {
+      return GetActorDynamicState(actor).angular_velocity;
+    }
+
+    void SetActorAngularVelocity(const Actor &actor, const geom::Vector3D &vector) {
+      _client.SetActorAngularVelocity(actor.Serialize(), vector);
+    }
+
+    void AddActorImpulse(const Actor &actor, const geom::Vector3D &vector) {
+      _client.AddActorImpulse(actor.Serialize(), vector);
+    }
+
     geom::Vector3D GetActorAcceleration(const Actor &actor) const {
       return GetActorDynamicState(actor).acceleration;
     }
@@ -218,6 +236,31 @@ namespace detail {
         std::function<void(SharedPtr<sensor::SensorData>)> callback);
 
     void UnSubscribeFromSensor(const Sensor &sensor);
+
+    /// @}
+    // =========================================================================
+    /// @name Operations with traffic lights
+    // =========================================================================
+    /// @{
+    void SetTrafficLightState(TrafficLight &trafficLight, const rpc::TrafficLightState trafficLightState) {
+      _client.SetTrafficLightState(trafficLight.Serialize(), trafficLightState);
+    }
+
+    void SetTrafficLightGreenTime(TrafficLight &trafficLight, float greenTime) {
+      _client.SetTrafficLightGreenTime(trafficLight.Serialize(), greenTime);
+    }
+
+    void SetTrafficLightYellowTime(TrafficLight &trafficLight, float yellowTime) {
+      _client.SetTrafficLightYellowTime(trafficLight.Serialize(), yellowTime);
+    }
+
+    void SetTrafficLightRedTime(TrafficLight &trafficLight, float redTime) {
+      _client.SetTrafficLightRedTime(trafficLight.Serialize(), redTime);
+    }
+
+    void FreezeTrafficLight(TrafficLight &trafficLight, bool freeze) {
+      _client.FreezeTrafficLight(trafficLight.Serialize(), freeze);
+    }
 
     /// @}
     // =========================================================================

@@ -90,11 +90,11 @@ if ${REMOVE_INTERMEDIATE} ; then
 
   rm -Rf ${UE4_INTERMEDIATE_FOLDERS}
 
+  rm -f Makefile
+
   pushd "${CARLAUE4_PLUGIN_ROOT_FOLDER}" >/dev/null
 
   rm -Rf ${UE4_INTERMEDIATE_FOLDERS}
-
-  rm -f Makefile
 
   popd >/dev/null
 
@@ -118,6 +118,11 @@ if ${BUILD_CARLAUE4} ; then
 
   log "Build CarlaUE4 project."
   make CarlaUE4Editor
+
+  #Providing the user with the ExportedMaps folder
+  EXPORTED_MAPS="${CARLAUE4_ROOT_FOLDER}/Content/Carla/ExportedMaps"
+  mkdir -p "${EXPORTED_MAPS}"
+
 
 fi
 
