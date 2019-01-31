@@ -17,10 +17,6 @@ namespace client {
 
     explicit TrafficLight(ActorInitializer init) : Actor(std::move(init)) {}
 
-    /// Return the current state of the traffic light.
-    ///
-    /// @note These functions do not call the simulator, they return the
-    /// data received in the last tick.
     void SetState(rpc::TrafficLightState state);
 
     rpc::TrafficLightState GetState() const;
@@ -43,6 +39,12 @@ namespace client {
 
     bool IsFrozen() const;
 
+    uint32_t GetPoleIndex();
+
+    /// Return all traffic lights in the group this one belongs to.
+    ///
+    /// @note This function calls the simulator
+    std::vector<SharedPtr<TrafficLight>> GetGroupTrafficLights();
   };
 
 } // namespace client

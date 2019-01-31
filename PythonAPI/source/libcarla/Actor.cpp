@@ -31,6 +31,16 @@ static auto GetSemanticTags(const carla::client::Actor &self) {
   return std::vector<int>(tags.begin(), tags.end());
 }
 
+static auto GetGroupTrafficLights(carla::client::TrafficLight &self) {
+  namespace py = boost::python;
+  auto values = self.GetGroupTrafficLights();
+  py::list result;
+  for (auto value : values) {
+    result.append(value);
+  }
+  return result;
+}
+
 void export_actor() {
   using namespace boost::python;
   namespace cc = carla::client;
@@ -114,6 +124,8 @@ void export_actor() {
       .def("get_elapsed_time", &cc::TrafficLight::GetElapsedTime)
       .def("freeze", &cc::TrafficLight::Freeze, (arg("freeze")))
       .def("is_frozen", &cc::TrafficLight::IsFrozen)
+      .def("get_pole_index", &cc::TrafficLight::GetPoleIndex)
+      .def("get_group_traffic_lights", &GetGroupTrafficLights)
       .def(self_ns::str(self_ns::self))
   ;
 }
