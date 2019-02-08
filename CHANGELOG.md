@@ -1,6 +1,8 @@
 ## Latest Changes
 
   * Fixed `manual_control.py` and `no_rendering_mode` to prevent crashes when used in "no rendering mode"
+  * Expose traffic sign's trigger volumes on Python API
+
 ## CARLA 0.9.3
 
   * Upgraded to Unreal Engine 4.21
