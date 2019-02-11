@@ -10,6 +10,7 @@
 
 #include "Vehicle/CarlaWheeledVehicleState.h"
 #include "Vehicle/VehicleControl.h"
+#include "Vehicle/VehiclePhysicsControl.h"
 
 #include "CoreMinimal.h"
 
@@ -137,6 +138,14 @@ public:
     SetHandbrakeInput(false);
   }
 
+
+  UFUNCTION(Category = "CARLA Wheeled Vehicle", BlueprintCallable)
+  void ApplyVehiclePhysicsControl(const FVehiclePhysicsControl &VehiclePhysicsControl);
+
+  UFUNCTION(Category = "CARLA Wheeled Vehicle", BlueprintCallable)
+  void SetMaxEngineRPM(float Value);
+
+
   void SetAIVehicleState(ECarlaWheeledVehicleState InState)
   {
     State = InState;
@@ -155,4 +164,5 @@ private:
   UVehicleAgentComponent *VehicleAgentComponent;
 
   FVehicleControl Control;
+  FVehiclePhysicsControl PhysicsControl;
 };

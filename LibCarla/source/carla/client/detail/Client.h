@@ -29,6 +29,7 @@ namespace rpc {
   class ActorDescription;
   class DebugShape;
   class VehicleControl;
+  class VehiclePhysicsControl;
   class WalkerControl;
 }
 namespace sensor {
@@ -107,6 +108,10 @@ namespace detail {
     void ApplyControlToVehicle(
         const rpc::Actor &vehicle,
         const rpc::VehicleControl &control);
+    
+    void ApplyPhysicsControlToVehicle(
+        const rpc::Actor &vehicle,
+        const rpc::VehiclePhysicsControl &control);
 
     void ApplyControlToWalker(
         const rpc::Actor &walker,

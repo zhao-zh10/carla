@@ -12,6 +12,7 @@
 #include "carla/rpc/DebugShape.h"
 #include "carla/rpc/Response.h"
 #include "carla/rpc/VehicleControl.h"
+#include "carla/rpc/VehiclePhysicsControl.h"
 #include "carla/rpc/WalkerControl.h"
 #include "carla/streaming/Client.h"
 
@@ -166,6 +167,10 @@ namespace detail {
     _pimpl->AsyncCall("apply_control_to_vehicle", vehicle, control);
   }
 
+  void Client::ApplyPhysicsControlToVehicle(const rpc::Actor &vehicle, const rpc::VehiclePhysicsControl &control) {
+    _pimpl->AsyncCall("apply_physics_control_to_vehicle", vehicle, control);
+  }
+  
   void Client::ApplyControlToWalker(const rpc::Actor &walker, const rpc::WalkerControl &control) {
     _pimpl->AsyncCall("apply_control_to_walker", walker, control);
   }

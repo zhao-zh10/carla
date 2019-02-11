@@ -405,6 +405,27 @@ void FTheNewCarlaServer::FPimpl::BindActions()
     return R<void>::Success();
   });
 
+Server.BindSync("apply_physics_control_to_vehicle", [this](
+      cr::Actor Actor, 
+      cr::VehiclePhysicsControl PhysicsControl) -> R<void>
+{
+    REQUIRE_CARLA_EPISODE();
+    auto ActorView = Episode->GetActorRegistry().Find(Actor.id);
+    if (!ActorView.IsValid() || ActorView.GetActor()->IsPendingKill())
+    {
+      RESPOND_ERROR("unable to set max rpm: actor not found");
+    }
+
+    auto Vehicle = Cast<ACarlaWheeledVehicle>(ActorView.GetActor());
+    if (Vehicle == nullptr)
+    {
+      RESPOND_ERROR("unable to set max rpm: actor does not support max rpm");
+    }
+
+    Vehicle->ApplyVehiclePhysicsControl(PhysicsControl);
+    return R<void>::Success();
+});
+
   Server.BindSync("apply_control_to_walker", [this](
         cr::Actor Actor,
         cr::WalkerControl Control) -> R<void>

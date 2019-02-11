@@ -221,6 +221,10 @@ namespace detail {
       _client.ApplyControlToVehicle(vehicle.Serialize(), control);
     }
 
+    void ApplyPhysicsControlToVehicle(Vehicle &vehicle, const rpc::VehiclePhysicsControl &control) {
+      _client.ApplyPhysicsControlToVehicle(vehicle.Serialize(), control);
+    }
+
     void ApplyControlToWalker(Walker &walker, const rpc::WalkerControl &control) {
       _client.ApplyControlToWalker(walker.Serialize(), control);
     }

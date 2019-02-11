@@ -99,6 +99,14 @@ void ACarlaWheeledVehicle::ApplyVehicleControl(const FVehicleControl &VehicleCon
   Control.bReverse = Control.Gear < 0;
 }
 
+void ACarlaWheeledVehicle::ApplyVehiclePhysicsControl(const FVehiclePhysicsControl &VehiclePhysicsControl)
+{
+  auto *MovementComponent = GetVehicleMovementComponent();
+  MovementComponent->MaxEngineRPM = VehiclePhysicsControl.MaxEngineRPM;
+
+  PhysicsControl = VehiclePhysicsControl;
+}
+
 void ACarlaWheeledVehicle::SetThrottleInput(const float Value)
 {
   GetVehicleMovementComponent()->SetThrottleInput(Value);
@@ -131,4 +139,10 @@ void ACarlaWheeledVehicle::SetHandbrakeInput(const bool Value)
 {
   GetVehicleMovementComponent()->SetHandbrakeInput(Value);
   Control.bHandBrake = Value;
+}
+
+void ACarlaWheeledVehicle::SetMaxEngineRPM(const float Value)
+{
+  GetVehicleMovementComponent()->MaxEngineRPM = Value;
+  PhysicsControl.MaxEngineRPM = Value;
 }

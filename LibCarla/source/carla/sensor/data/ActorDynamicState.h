@@ -11,6 +11,7 @@
 #include "carla/rpc/ActorId.h"
 #include "carla/rpc/TrafficLightState.h"
 #include "carla/rpc/VehicleControl.h"
+#include "carla/rpc/VehiclePhysicsControl.h"
 #include "carla/rpc/WalkerControl.h"
 
 #include <cstdint>
@@ -54,10 +55,31 @@ namespace detail {
 #pragma pack(pop)
 
 #pragma pack(push, 1)
+  class PackedVehiclePhysicsControl {
+  public:
+
+    PackedVehiclePhysicsControl() = default;
+
+    PackedVehiclePhysicsControl(const rpc::VehiclePhysicsControl &control)
+      : max_engine_rpm(control.max_engine_rpm) {}
+
+    operator rpc::VehiclePhysicsControl() const {
+      return {max_engine_rpm};
+    }
+
+  private:
+
+    float max_engine_rpm;
+  };
+
+#pragma pack(pop)
+
+#pragma pack(push, 1)
   struct VehicleData {
     VehicleData() = default;
 
     PackedVehicleControl control;
+    PackedVehiclePhysicsControl physics_control;
     float speed_limit;
     rpc::TrafficLightState traffic_light_state;
     bool has_traffic_light;

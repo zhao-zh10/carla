@@ -5,6 +5,7 @@
 // For a copy, see <https://opensource.org/licenses/MIT>.
 
 #include <carla/rpc/VehicleControl.h>
+#include <carla/rpc/VehiclePhysicsControl.h>
 #include <carla/rpc/WalkerControl.h>
 
 #include <ostream>
@@ -34,6 +35,10 @@ namespace rpc {
     return out;
   }
 
+  std::ostream &operator<<(std::ostream &out, const VehiclePhysicsControl &control) {
+    out << "VehiclePhysicsControl(max_engine_rpm=" << control.max_engine_rpm << ')';
+    return out;
+  }
 } // namespace rpc
 } // namespace carla
 
@@ -73,6 +78,15 @@ void export_control() {
     .def_readwrite("jump", &cr::WalkerControl::jump)
     .def("__eq__", &cr::WalkerControl::operator==)
     .def("__ne__", &cr::WalkerControl::operator!=)
+    .def(self_ns::str(self_ns::self))
+  ;
+
+  class_<cr::VehiclePhysicsControl>("VehiclePhysicsControl")
+    .def(init<float>(
+        (arg("max_engine_rpm")=0)))
+    .def_readwrite("max_engine_rpm", &cr::VehiclePhysicsControl::max_engine_rpm)
+    .def("__eq__", &cr::VehiclePhysicsControl::operator==)
+    .def("__ne__", &cr::VehiclePhysicsControl::operator!=)
     .def(self_ns::str(self_ns::self))
   ;
 }
