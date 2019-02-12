@@ -61,15 +61,36 @@ namespace detail {
     PackedVehiclePhysicsControl() = default;
 
     PackedVehiclePhysicsControl(const rpc::VehiclePhysicsControl &control)
-      : max_engine_rpm(control.max_engine_rpm) {}
+      : mass(control.mass),
+        drag_coefficient(control.drag_coefficient),
+        chassis_width(control.chassis_width),
+        chassis_height(control.chassis_height),
+        drag_area(control.drag_area),
+        estimated_max_engine_speed(control.estimated_max_engine_speed),
+        max_engine_rpm(control.max_engine_rpm),
+        debug_drag_magnitude(control.debug_drag_magnitude) {}
 
     operator rpc::VehiclePhysicsControl() const {
-      return {max_engine_rpm};
+      return {mass,
+              drag_coefficient,
+              chassis_width,
+              chassis_height,
+              drag_area,
+              estimated_max_engine_speed,
+              max_engine_rpm,
+              debug_drag_magnitude};
     }
 
   private:
 
+    float mass;
+    float drag_coefficient;
+    float chassis_width;
+    float chassis_height;
+    float drag_area;
+    float estimated_max_engine_speed;
     float max_engine_rpm;
+    float debug_drag_magnitude;
   };
 
 #pragma pack(pop)

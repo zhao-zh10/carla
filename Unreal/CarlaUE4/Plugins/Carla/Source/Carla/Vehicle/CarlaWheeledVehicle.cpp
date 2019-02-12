@@ -101,10 +101,26 @@ void ACarlaWheeledVehicle::ApplyVehicleControl(const FVehicleControl &VehicleCon
 
 void ACarlaWheeledVehicle::ApplyVehiclePhysicsControl(const FVehiclePhysicsControl &VehiclePhysicsControl)
 {
-  auto *MovementComponent = GetVehicleMovementComponent();
-  MovementComponent->MaxEngineRPM = VehiclePhysicsControl.MaxEngineRPM;
+  // Vehicle Setup
+  GetVehicleMovementComponent()->Mass = VehiclePhysicsControl.Mass;
+  // GetVehicleMovementComponent()->WheelSetup
+  GetVehicleMovementComponent()->DragCoefficient = VehiclePhysicsControl.DragCoefficient;
+  GetVehicleMovementComponent()->ChassisWidth = VehiclePhysicsControl.ChassisWidth;
+  GetVehicleMovementComponent()->ChassisHeight = VehiclePhysicsControl.ChassisHeight;
+  GetVehicleMovementComponent()->DragArea = VehiclePhysicsControl.DragArea;
+  GetVehicleMovementComponent()->EstimatedMaxEngineSpeed = VehiclePhysicsControl.EstimatedMaxEngineSpeed;
+  GetVehicleMovementComponent()->MaxEngineRPM = VehiclePhysicsControl.MaxEngineRPM;
+  GetVehicleMovementComponent()->DebugDragMagnitude = VehiclePhysicsControl.DebugDragMagnitude;
+
+  // Vehicle Setup - Inertia
+  // GetVehicleMovementComponent()->InertiaTensorScale = VehiclePhysicsControl->InertiaTensorScale;
+  // GetVehicleMovementComponent()->MinNormalizedTireLoad = VehiclePhysicsControl->MinNormalizedTireLoad;
+  // GetVehicleMovementComponent()->MinNormalizedTireLoadFiltered = VehiclePhysicsControl->MinNormalizedTireLoadFiltered;
+  // GetVehicleMovementComponent()->MaxNormalizedTireLoad = VehiclePhysicsControl->MaxNormalizedTireLoad;
+  // GetVehicleMovementComponent()->MaxNormalizedTireLoadFiltered = VehiclePhysicsControl->MaxNormalizedTireLoadFiltered;
 
   PhysicsControl = VehiclePhysicsControl;
+
 }
 
 void ACarlaWheeledVehicle::SetThrottleInput(const float Value)

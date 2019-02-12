@@ -49,6 +49,12 @@ public:
     return Control;
   }
 
+  UFUNCTION(Category = "CARLA Wheeled Vehicle", BlueprintCallable)
+  const FVehiclePhysicsControl &GetVehiclePhysicsControl() const
+  {
+    return PhysicsControl;
+  }
+  
   /// Transform of the vehicle. Location is shifted so it matches center of the
   /// vehicle bounds rather than the actor's location.
   UFUNCTION(Category = "CARLA Wheeled Vehicle", BlueprintCallable)

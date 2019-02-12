@@ -29,6 +29,7 @@ static auto AWorldObserver_GetActorState(const FActorView &View, const FActorReg
     if (Vehicle != nullptr)
     {
       state.vehicle_data.control = carla::rpc::VehicleControl{Vehicle->GetVehicleControl()};
+      state.vehicle_data.physics_control = carla::rpc::VehiclePhysicsControl{Vehicle->GetVehiclePhysicsControl()};
       auto Controller = Cast<AWheeledVehicleAIController>(Vehicle->GetController());
       if (Controller != nullptr)
       {
