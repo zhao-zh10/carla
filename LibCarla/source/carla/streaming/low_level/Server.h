@@ -36,22 +36,17 @@ namespace low_level {
         detail::EndPoint<protocol_type, ExternalEPType> external_ep)
       : _server(io_service, std::move(internal_ep)),
         _dispatcher(std::move(external_ep)) {
-      auto on_session_opened = [this](auto session) {
-        if (!_dispatcher.RegisterSession(session)) {
-          session->Close();
-        }
-      };
-      auto on_session_closed = [this](auto session) {
-        _dispatcher.DeregisterSession(session);
-      };
-      _server.Listen(on_session_opened, on_session_closed);
+      StartServer();
     }
 
     template <typename InternalEPType>
     explicit Server(
         boost::asio::io_service &io_service,
         detail::EndPoint<protocol_type, InternalEPType> internal_ep)
-      : Server(io_service, internal_ep, make_endpoint<protocol_type>(internal_ep.port())) {}
+      : _server(io_service, std::move(internal_ep)),
+        _dispatcher(make_endpoint<protocol_type>(_server.GetLocalEndpoint().port())) {
+      StartServer();
+    }
 
     template <typename... EPArgs>
     explicit Server(boost::asio::io_service &io_service, EPArgs &&... args)
@@ -70,6 +65,18 @@ namespace low_level {
     }
 
   private:
+
+    void StartServer() {
+      auto on_session_opened = [this](auto session) {
+        if (!_dispatcher.RegisterSession(session)) {
+          session->Close();
+        }
+      };
+      auto on_session_closed = [this](auto session) {
+        _dispatcher.DeregisterSession(session);
+      };
+      _server.Listen(on_session_opened, on_session_closed);
+    }
 
     underlying_server _server;
 
