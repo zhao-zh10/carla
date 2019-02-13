@@ -6,7 +6,9 @@
   * Fixed global route planner to handle round about turns and made the code consistent with local planner
   * Basic agent integrated with global router
   * Fixed local planner to avoid premature route pruning at path overlaps
-
+  * Fixed `manual_control.py` and `no_rendering_mode.py` to prevent crashes when used in "no rendering mode"
+  * Refactored `no_rendering_mode.py` to improve performance and interface
+  
 ## CARLA 0.9.3
 
   * Upgraded to Unreal Engine 4.21
