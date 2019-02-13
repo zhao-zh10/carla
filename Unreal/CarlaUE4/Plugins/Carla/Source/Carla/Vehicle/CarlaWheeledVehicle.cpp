@@ -16,8 +16,8 @@
 // -- Constructor and destructor -----------------------------------------------
 // =============================================================================
 
-ACarlaWheeledVehicle::ACarlaWheeledVehicle(const FObjectInitializer& ObjectInitializer) :
-  Super(ObjectInitializer)
+ACarlaWheeledVehicle::ACarlaWheeledVehicle(const FObjectInitializer &ObjectInitializer) : Super(
+                                                                                              ObjectInitializer)
 {
   VehicleBounds = CreateDefaultSubobject<UBoxComponent>(TEXT("VehicleBounds"));
   VehicleBounds->SetupAttachment(RootComponent);
@@ -101,26 +101,37 @@ void ACarlaWheeledVehicle::ApplyVehicleControl(const FVehicleControl &VehicleCon
 
 void ACarlaWheeledVehicle::ApplyVehiclePhysicsControl(const FVehiclePhysicsControl &VehiclePhysicsControl)
 {
-  // Vehicle Setup
-  GetVehicleMovementComponent()->Mass = VehiclePhysicsControl.Mass;
-  // GetVehicleMovementComponent()->WheelSetup
-  GetVehicleMovementComponent()->DragCoefficient = VehiclePhysicsControl.DragCoefficient;
-  GetVehicleMovementComponent()->ChassisWidth = VehiclePhysicsControl.ChassisWidth;
-  GetVehicleMovementComponent()->ChassisHeight = VehiclePhysicsControl.ChassisHeight;
-  GetVehicleMovementComponent()->DragArea = VehiclePhysicsControl.DragArea;
-  GetVehicleMovementComponent()->EstimatedMaxEngineSpeed = VehiclePhysicsControl.EstimatedMaxEngineSpeed;
-  GetVehicleMovementComponent()->MaxEngineRPM = VehiclePhysicsControl.MaxEngineRPM;
-  GetVehicleMovementComponent()->DebugDragMagnitude = VehiclePhysicsControl.DebugDragMagnitude;
 
-  // Vehicle Setup - Inertia
-  // GetVehicleMovementComponent()->InertiaTensorScale = VehiclePhysicsControl->InertiaTensorScale;
-  // GetVehicleMovementComponent()->MinNormalizedTireLoad = VehiclePhysicsControl->MinNormalizedTireLoad;
-  // GetVehicleMovementComponent()->MinNormalizedTireLoadFiltered = VehiclePhysicsControl->MinNormalizedTireLoadFiltered;
-  // GetVehicleMovementComponent()->MaxNormalizedTireLoad = VehiclePhysicsControl->MaxNormalizedTireLoad;
-  // GetVehicleMovementComponent()->MaxNormalizedTireLoadFiltered = VehiclePhysicsControl->MaxNormalizedTireLoadFiltered;
+  UCarlaWheeledVehicleMovementComponent4W *Vehicle4W = CastChecked<UCarlaWheeledVehicleMovementComponent4W>(GetVehicleMovement());
+
+  // Engine Setup
+  Vehicle4W->EngineSetup.TorqueCurve = VehiclePhysicsControl.TorqueCurve;
+
+  Vehicle4W->EngineSetup.MaxRPM = VehiclePhysicsControl.MaxRPM;
+  Vehicle4W->EngineSetup.MOI = VehiclePhysicsControl.MOI;
+  Vehicle4W->EngineSetup.DampingRateFullThrottle = VehiclePhysicsControl.DampingRateFullThrottle;
+  Vehicle4W->EngineSetup.DampingRateZeroThrottleClutchEngaged = VehiclePhysicsControl.DampingRateZeroThrottleClutchEngaged;
+  Vehicle4W->EngineSetup.DampingRateZeroThrottleClutchDisengaged = VehiclePhysicsControl.DampingRateZeroThrottleClutchDisengaged;
+  Vehicle4W->ApplyEngineSetup(Vehicle4W->EngineSetup);
+
+  // Differential Setup
+  // TODO: Differential Type
+
+  // Transmission Setup
+  Vehicle4W->TransmissionSetup.bUseGearAutoBox = VehiclePhysicsControl.bUseGearAutoBox;
+  Vehicle4W->TransmissionSetup.GearSwitchTime = VehiclePhysicsControl.GearSwitchTime;
+  Vehicle4W->TransmissionSetup.ClutchStrength = VehiclePhysicsControl.ClutchStrength;
+
+  Vehicle4W->ApplyTransmissionSetup(Vehicle4W->TransmissionSetup);
+
+  // Steering Setup
+
+  // Vehicle Setup
+  Vehicle4W->Mass = VehiclePhysicsControl.Mass;
+  Vehicle4W->DragCoefficient = VehiclePhysicsControl.DragCoefficient;
+  Vehicle4W->InertiaTensorScale = VehiclePhysicsControl.InertiaTensorScale;
 
   PhysicsControl = VehiclePhysicsControl;
-
 }
 
 void ACarlaWheeledVehicle::SetThrottleInput(const float Value)
@@ -155,10 +166,4 @@ void ACarlaWheeledVehicle::SetHandbrakeInput(const bool Value)
 {
   GetVehicleMovementComponent()->SetHandbrakeInput(Value);
   Control.bHandBrake = Value;
-}
-
-void ACarlaWheeledVehicle::SetMaxEngineRPM(const float Value)
-{
-  GetVehicleMovementComponent()->MaxEngineRPM = Value;
-  PhysicsControl.MaxEngineRPM = Value;
 }

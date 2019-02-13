@@ -13,11 +13,27 @@
 #include "Vehicle/VehiclePhysicsControl.h"
 
 #include "CoreMinimal.h"
+#include "WheeledVehicleMovementComponent4W.h"
 
 #include "CarlaWheeledVehicle.generated.h"
 
 class UBoxComponent;
 class UVehicleAgentComponent;
+
+class UCarlaWheeledVehicleMovementComponent4W : public UWheeledVehicleMovementComponent4W
+{
+public:
+
+  void ApplyEngineSetup(const FVehicleEngineData &EngineData)
+  {
+    UpdateEngineSetup(EngineData);
+  }
+
+  void ApplyTransmissionSetup(const FVehicleTransmissionData &TransmissionData)
+  {
+    UpdateTransmissionSetup(TransmissionData);
+  }
+};
 
 /// Base class for CARLA wheeled vehicles.
 UCLASS()
@@ -147,9 +163,6 @@ public:
 
   UFUNCTION(Category = "CARLA Wheeled Vehicle", BlueprintCallable)
   void ApplyVehiclePhysicsControl(const FVehiclePhysicsControl &VehiclePhysicsControl);
-
-  UFUNCTION(Category = "CARLA Wheeled Vehicle", BlueprintCallable)
-  void SetMaxEngineRPM(float Value);
 
 
   void SetAIVehicleState(ECarlaWheeledVehicleState InState)

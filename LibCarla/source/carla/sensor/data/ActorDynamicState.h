@@ -61,36 +61,53 @@ namespace detail {
     PackedVehiclePhysicsControl() = default;
 
     PackedVehiclePhysicsControl(const rpc::VehiclePhysicsControl &control)
-      : mass(control.mass),
+      : max_rpm(control.max_rpm),
+        moi(control.moi),
+        damping_rate_full_throttle(control.damping_rate_full_throttle),
+        damping_rate_zero_throttle_clutch_engaged(control.damping_rate_zero_throttle_clutch_engaged),
+        damping_rate_zero_throttle_clutch_disengaged(control.damping_rate_zero_throttle_clutch_disengaged),
+
+        use_gear_autobox(control.use_gear_autobox),
+        gear_switch_time(control.gear_switch_time),
+        clutch_strength(control.clutch_strength),
+
+        mass(control.mass),
         drag_coefficient(control.drag_coefficient),
-        chassis_width(control.chassis_width),
-        chassis_height(control.chassis_height),
-        drag_area(control.drag_area),
-        estimated_max_engine_speed(control.estimated_max_engine_speed),
-        max_engine_rpm(control.max_engine_rpm),
-        debug_drag_magnitude(control.debug_drag_magnitude) {}
+        inertia_tensor_scale{control.inertia_tensor_scale.x, control.inertia_tensor_scale.y, control.inertia_tensor_scale.z}
+    {}
 
     operator rpc::VehiclePhysicsControl() const {
-      return {mass,
-              drag_coefficient,
-              chassis_width,
-              chassis_height,
-              drag_area,
-              estimated_max_engine_speed,
-              max_engine_rpm,
-              debug_drag_magnitude};
+      return {       max_rpm,
+                     moi,
+                     damping_rate_full_throttle,
+                     damping_rate_zero_throttle_clutch_engaged,
+                     damping_rate_zero_throttle_clutch_disengaged,
+
+                     use_gear_autobox,
+                     gear_switch_time,
+                     clutch_strength,
+
+                     mass,
+                     drag_coefficient,
+                     geom::Vector3D{inertia_tensor_scale[0u], inertia_tensor_scale[1u], inertia_tensor_scale[2u]}};
+
     }
 
   private:
 
+    float max_rpm;
+    float moi;
+    float damping_rate_full_throttle;
+    float damping_rate_zero_throttle_clutch_engaged;
+    float damping_rate_zero_throttle_clutch_disengaged;
+
+    bool use_gear_autobox;
+    float gear_switch_time;
+    float clutch_strength;
+
     float mass;
     float drag_coefficient;
-    float chassis_width;
-    float chassis_height;
-    float drag_area;
-    float estimated_max_engine_speed;
-    float max_engine_rpm;
-    float debug_drag_magnitude;
+    float inertia_tensor_scale[3u];
   };
 
 #pragma pack(pop)
