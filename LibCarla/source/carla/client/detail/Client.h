@@ -157,6 +157,8 @@ namespace detail {
     std::string ShowRecorderFileInfo(std::string name);
     std::string ReplayFile(std::string name, double start, double duration);
 
+    void SendTickCue();
+
   private:
 
     class Pimpl;
