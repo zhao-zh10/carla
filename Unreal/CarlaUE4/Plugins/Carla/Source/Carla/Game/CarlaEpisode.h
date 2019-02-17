@@ -7,10 +7,11 @@
 #pragma once
 
 #include "Carla/Actor/ActorDispatcher.h"
-#include "Carla/Sensor/WorldObserver.h"
-#include "Carla/Weather/Weather.h"
-#include "Carla/Server/TheNewCarlaServer.h"
 #include "Carla/Game/CarlaRecorder.h"
+#include "Carla/Sensor/WorldObserver.h"
+#include "Carla/Server/TheNewCarlaServer.h"
+#include "Carla/Settings/EpisodeSettings.h"
+#include "Carla/Weather/Weather.h"
 
 #include <compiler/disable-ue4-macros.h>
 #include <carla/rpc/Actor.h>
@@ -36,6 +37,21 @@ class CARLA_API UCarlaEpisode : public UObject
 public:
 
   UCarlaEpisode(const FObjectInitializer &ObjectInitializer);
+
+  // ===========================================================================
+  // -- Episode settings -------------------------------------------------------
+  // ===========================================================================
+
+public:
+
+  UFUNCTION(BlueprintCallable)
+  const FEpisodeSettings &GetSettings() const
+  {
+    return EpisodeSettings;
+  }
+
+  UFUNCTION(BlueprintCallable)
+  void ApplySettings(const FEpisodeSettings &Settings);
 
   // ===========================================================================
   // -- Retrieve info about this episode ---------------------------------------
@@ -260,10 +276,13 @@ private:
 
   const uint32 Id = 0u;
 
+  double ElapsedGameTime = 0.0;
+
   UPROPERTY(VisibleAnywhere)
   FString MapName;
 
-  double ElapsedGameTime = 0.0;
+  UPROPERTY(VisibleAnywhere)
+  FEpisodeSettings EpisodeSettings;
 
   UPROPERTY(VisibleAnywhere)
   UActorDispatcher *ActorDispatcher = nullptr;
