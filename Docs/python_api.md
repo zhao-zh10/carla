@@ -19,7 +19,6 @@
 ## `carla.World`
 
 - `id`
-- `map_name`
 - `debug`
 - `get_blueprint_library()`
 - `get_map()`
