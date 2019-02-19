@@ -22,10 +22,11 @@ void export_client() {
     .def("get_client_version", &cc::Client::GetClientVersion)
     .def("get_server_version", CONST_CALL_WITHOUT_GIL(cc::Client, GetServerVersion))
     .def("get_world", &cc::Client::GetWorld)
+    .def("reload_world", &cc::Client::ReloadWorld)
+    .def("load_world", &cc::Client::LoadWorld, (arg("map_name")))
     .def("start_recorder", &cc::Client::StartRecorder, (arg("name")))
     .def("stop_recorder", &cc::Client::StopRecorder)
     .def("show_recorder_file_info", &cc::Client::ShowRecorderFileInfo, (arg("name")))
     .def("replay_file", &cc::Client::ReplayFile, (arg("name"), arg("time_start"), arg("duration")))
-
   ;
 }

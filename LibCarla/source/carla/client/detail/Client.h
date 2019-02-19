@@ -64,6 +64,8 @@ namespace detail {
 
     std::string GetServerVersion();
 
+    void LoadEpisode(std::string map_name);
+
     rpc::EpisodeInfo GetEpisodeInfo();
 
     rpc::MapInfo GetMapInfo();
