@@ -214,7 +214,10 @@
 - `lane_width`
 - `road_id`
 - `lane_id`
+- `lane_change`
 - `next(distance)`
+- `right_lane()`
+- `left_lane()`
 
 ## `carla.WeatherParameters`
 
